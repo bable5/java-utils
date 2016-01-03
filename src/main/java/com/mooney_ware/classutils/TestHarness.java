@@ -1,14 +1,15 @@
 package com.mooney_ware.classutils;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
 /**
  * A simple harness for delaying entry to Class.main(...) until ENTER is pressed.
- *  @author Sean Mooney, Sarah Kabala.
+ *
+ * @author Sean Mooney, Sarah Kabala.
  */
 public class TestHarness {
     public static void main(String[] args) throws java.io.IOException {
-        if(args.length < 1) {
+        if (args.length < 1) {
             System.err.println("Please give the name of a Java class to run in the TestHarness.");
         } else {
             String className = args[0];
@@ -19,10 +20,10 @@ public class TestHarness {
 
     public static void testHarness(String className, String[] args) {
         try {
-            System.out.println("Press ENTER to begin "+className+".");
+            System.out.println("Press ENTER to begin " + className + ".");
             System.in.read();
             runMain(className, args);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.err.println("Exception encountered.");
             System.err.println(ex.getMessage());
             ex.printStackTrace();
@@ -34,11 +35,11 @@ public class TestHarness {
     }
 
     static String[] buildProgramArgs(String[] args) {
-        String [] programArgs;
+        String[] programArgs;
 
         if (args.length > 1) {
-            programArgs = new String[args.length-1];
-            System.arraycopy(args,1,programArgs,0,programArgs.length);
+            programArgs = new String[args.length - 1];
+            System.arraycopy(args, 1, programArgs, 0, programArgs.length);
         } else {
             programArgs = new String[0];
         }
