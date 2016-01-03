@@ -12,11 +12,7 @@ public class TestHarness {
             System.err.println("Please give the name of a Java class to run in the TestHarness.");
         } else {
             String className = args[0];
-            String[] programArgs = null;
-            if (args.length > 1) {
-                programArgs = new String[args.length-1];
-                System.arraycopy(args,1,programArgs,0,programArgs.length);
-            }
+            String[] programArgs = buildProgramArgs(args);
             testHarness(className, programArgs);
         }
     }
@@ -25,9 +21,7 @@ public class TestHarness {
         try {
             System.out.println("Press ENTER to begin "+className+".");
             System.in.read();
-            Class<?> testClass = loadClass(className);
-            Method mainMethod = testClass.getDeclaredMethod("main", String[].class);
-            mainMethod.invoke(null, (Object) args);
+            runMain(className, args);
         } catch(Exception ex) {
             System.err.println("Exception encountered.");
             System.err.println(ex.getMessage());
@@ -37,5 +31,28 @@ public class TestHarness {
 
     static Class<?> loadClass(String className) throws ClassNotFoundException, SecurityException {
         return Class.forName(className);
+    }
+
+    static String[] buildProgramArgs(String[] args) {
+        String [] programArgs;
+
+        if (args.length > 1) {
+            programArgs = new String[args.length-1];
+            System.arraycopy(args,1,programArgs,0,programArgs.length);
+        } else {
+            programArgs = new String[0];
+        }
+
+        return programArgs;
+    }
+
+    public static void runMain(String className, String[] args) {
+        try {
+            Class<?> testClass = loadClass(className);
+            Method mainMethod = testClass.getDeclaredMethod("main", String[].class);
+            mainMethod.invoke(null, (Object) args);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
